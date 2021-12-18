@@ -8,7 +8,13 @@ import Signup from "./Pages/Signup";
 import Blog from "./Pages/Blog";
 import Postblog from "./Pages/Postblog";
 import Viewblog from "./Pages/Viewblog";
+import Map from "./Pages/Map";
 import ChangePassword from "./Pages/ChangePassword";
+import ViewGrievance from "./Pages/ViewGrievance";
+import ManageDashboard from "./Pages/ManageDashboard";
+import PostGrievance from "./Pages/PostGrievance";
+import Postgraph from "./Pages/Postgraph";
+import Viewgraph from "./Pages/Viewgraph";
 
 function App() {
   // localStorage.setItem("Auth", false);
@@ -40,6 +46,24 @@ function App() {
         </Route>
         <Route exact path="/change_password">
           <ChangePassword />
+        </Route>
+        <Route exact path="/manage_dashboard">
+          <ManageDashboard />
+        </Route>
+        <Route exact path="/view_grievance">
+          <ViewGrievance />
+        </Route>
+        <Route exact path="/post_grievance">
+          <PostGrievance />
+        </Route>
+        <Route exact path="/post_crop_rates">
+          <Postgraph />
+        </Route>
+        <Route exact path="/view_graph">
+          <Viewgraph />
+        </Route>
+        <Route exact path="/map">
+          <Map />
         </Route>
       </Switch>
     </Router>

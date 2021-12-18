@@ -23,6 +23,9 @@ const Blog = () => {
   }, []);
   const printcard = () => {
     const cards = [];
+    if(blogs[0]==0){
+      cards.push(<h3 className="pageheading">No blogs available</h3>)
+    }else{
     for (var i = 1; i <= blogs[0]; i++) {
       cards.push(
         <Card style={{ minwidth: "100%", height: "150px", margin: "10px" }}>
@@ -33,6 +36,7 @@ const Blog = () => {
         </Card>
       );
     }
+  }
     return cards;
   };
   return (

@@ -3,6 +3,7 @@ import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 
 const NavBar = () => {
   let authenticated = localStorage.getItem("Auth");
+  let category = localStorage.getItem("category");
   return (
     <div>
       <Navbar bg="primary" expand="lg">
@@ -24,6 +25,17 @@ const NavBar = () => {
                 <Nav.Link href="/">Home</Nav.Link>
                 <Nav.Link href="/change_password">Self Service</Nav.Link>
                 <Nav.Link href="/viewblogs">Blogs</Nav.Link>
+                <Nav.Link href="/map">Map</Nav.Link>
+                {category === "Governament" && category !== "Private Sector" ? (
+                  <Nav.Link href="/manage_dashboard">Manage Dashboard</Nav.Link>
+                ) : (
+                  <div></div>
+                )}
+                {category === "Governament" && category !== "Private Sector" ? (
+                  <Nav.Link href="/view_grievance">View Grievance</Nav.Link>
+                ) : (
+                  <Nav.Link href="/post_grievance">Post Grievance</Nav.Link>
+                )}
                 {/* <NavDropdown title="Self Service" id="basic-nav-dropdown">
                   <NavDropdown.Item href="/change_password">
                     Change Password
@@ -58,8 +70,9 @@ const NavBar = () => {
                 </Navbar.Text>
                 <Nav.Link
                   onClick={() => {
-                    localStorage.setItem("Auth", false);
-                    window.location.reload();
+                    localStorage.clear();
+                    // localStorage.setItem("Auth", false);
+                    window.location.href = "http://localhost:3000";
                   }}
                 >
                   Log out

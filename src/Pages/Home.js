@@ -1,10 +1,43 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./NavBar";
-import { Container, Row, Col, Card, Carousel } from "react-bootstrap";
+import { Container, Row, Col, Card, Carousel, Button } from "react-bootstrap";
 import Marquee from "react-fast-marquee";
 
 const Home = () => {
-  useEffect(() => {}, []);
+  const [notice, setNotice] = useState([]);
+  useEffect(() => {
+    fetch("/api/getNotice", { method: "GET" })
+      .then((res) => res.json())
+      .then((data) => setNotice(data));
+  }, []);
+  const printNotice = () => {
+    const data = [];
+    if (notice[0] == 0) {
+      data.push(<Card.Title>No Notice Available</Card.Title>);
+    } else {
+      for (var i = 1; i <= notice[0]; i++) {
+        data.push(
+          <div>
+            <Card.Text style={{ textAlign: "center" }}>
+              <div style={{ textAlign: "left", marginBottom: "10px" }}>
+                {notice[i].subject}
+              </div>
+              <Button
+                target="_blank"
+                href={notice[i].link}
+                variant="outline-info"
+                style={{ padding: "5px", width: "100%" }}
+              >
+                Visit
+              </Button>
+              <hr />
+            </Card.Text>
+          </div>
+        );
+      }
+    }
+    return data;
+  };
   return (
     <div>
       <Navbar />
@@ -22,14 +55,8 @@ const Home = () => {
         <Row>
           <Col xs={12} sm={3} md={3} lg={3}>
             <Card border="danger" style={{ margin: "0px", height: "100%" }}>
-              <Card.Header>Recent News</Card.Header>
-              <Card.Body>
-                <Card.Title>Dark Card Title</Card.Title>
-                <Card.Text>
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </Card.Text>
-              </Card.Body>
+              <Card.Header>Important Links</Card.Header>
+              <Card.Body>{printNotice()}</Card.Body>
             </Card>
           </Col>
           <Col>
@@ -100,7 +127,7 @@ const Home = () => {
                 <Carousel.Caption>
                   <h3>Paddy Feilds</h3>
                   <p>
-                  Know you food, know your farmers, and know your kitchen.
+                    Know you food, know your farmers, and know your kitchen.
                   </p>
                 </Carousel.Caption>
               </Carousel.Item>

@@ -25,6 +25,8 @@ const Login = () => {
           localStorage.setItem("username", data.username);
           localStorage.setItem("state", data.state);
           localStorage.setItem("district", data.district);
+          localStorage.setItem("category", data.category);
+          localStorage.setItem("aadhar", data.aadhar);
           localStorage.setItem("Auth", true);
           window.location.href = "http://localhost:3000";
         }
