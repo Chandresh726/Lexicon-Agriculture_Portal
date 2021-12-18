@@ -10,21 +10,24 @@ const NavBar = () => {
           <Navbar.Brand href="/">
             <img
               alt=""
-              src="logo192.png"
+              src="lexicon-logo.png"
               width="30"
               height="30"
               className="d-inline-block align-top"
             />
-            React Bootstrap
+            Kisan
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           {authenticated === "true" ? (
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="me-auto">
                 <Nav.Link href="/">Home</Nav.Link>
-                <Nav.Link href="#link">Link</Nav.Link>
-                <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                  <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+                <Nav.Link href="/change_password">Self Service</Nav.Link>
+                <Nav.Link href="/viewblogs">Blogs</Nav.Link>
+                {/* <NavDropdown title="Self Service" id="basic-nav-dropdown">
+                  <NavDropdown.Item href="/change_password">
+                    Change Password
+                  </NavDropdown.Item>
                   <NavDropdown.Item href="#action/3.2">
                     Another action
                   </NavDropdown.Item>
@@ -35,14 +38,14 @@ const NavBar = () => {
                   <NavDropdown.Item href="#action/3.4">
                     Separated link
                   </NavDropdown.Item>
-                </NavDropdown>
+                </NavDropdown> */}
               </Nav>
             </Navbar.Collapse>
           ) : (
             <div></div>
           )}
           <Navbar.Collapse className="justify-content-end">
-            {authenticated === "false" ? (
+            {authenticated === "false" || authenticated === null ? (
               <Nav>
                 <Nav.Link href="/login">Log in</Nav.Link>
                 <Nav.Link href="/signup">Sign Up</Nav.Link>
@@ -50,7 +53,8 @@ const NavBar = () => {
             ) : (
               <Nav>
                 <Navbar.Text>
-                  Signed in as: <a href="#login">Mark Otto</a>
+                  Signed in as:{" "}
+                  <a href="#login">{localStorage.getItem("username")}</a>
                 </Navbar.Text>
                 <Nav.Link
                   onClick={() => {

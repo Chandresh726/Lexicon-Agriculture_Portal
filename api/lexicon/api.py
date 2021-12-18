@@ -29,7 +29,7 @@ def get_current_time():
 
 
     
-
+############################################### signup logic ###############################################
 
 def put_person_details(person_info):
     username=person_info["username"]
@@ -53,19 +53,21 @@ def signup():
     return {"message":"Please try again after some time.","status":400}
 
 
+############################################## login logic ###########################################
+
 def get_person_details(person_info):
     username=person_info["username"]
     password=person_info["password"]
     category=person_info["category"]
-    data=list(db.login_details.find_one(
+    print(username,password,category)
+    data=db.login_details.find_one(
    { "username": username,"password":password,"category":category},
    { "_id": 0 ,"username":1,"state":1,"district":1,"aadhar":1}
-    ))
-    print(data)
-    if data == []:
-        return {"message":"failure","name":data,"status":400}
+    )
+    if data == None:
+        return {"message":"failure","username":'',"state":'',"district":'',"status":400}
     else:
-        return {"message":"success","name":data,"status":200}
+        return {"message":"success","username":data["username"],"state":data["state"],"district":data["district"],"status":200}
     # return {"message":"success","status":200}
 
     
@@ -77,7 +79,29 @@ def login_auth():
         return get_person_details(person_info)
     # return {"message":"Please try again after some time.","status":400}
 
+#################################################### my blogs ##########################
 
+
+def my_blog_data(blog_data):
+    username=blog_data["username"]
+    state=blog_data["state"]
+    district=blog_data["district"]
+    temp=list(db.blogs.find({"username":username,"state":state,"district":district},{"_id":0}))
+    data={0:len(temp)}
+    for i in range(len(temp)):
+        data[i+1]=temp[i]
+    print(data)
+    return data
+@app.route('/api/my_blog' ,methods=['POST'])
+def my_blog():
+    blog_data = request.get_json(force=True)
+    if blog_data:
+        data = my_blog_data(blog_data)
+        return data
+    return {"message":"Please try again after some time.","status":400}
+
+
+##################################################### post blog information  #######################
 def put_blog_data(blog_data):
     username=blog_data["username"]
     state=blog_data["state"]
@@ -94,11 +118,15 @@ def post_blog():
     return {"message":"Please try again after some time.","status":400}
 
 
+########################################## view blog of current state and district ####################
 def get_blog_data_local(get_data):
     state=get_data["state"]
     district=get_data["district"]
-    data=db.blogs.find({"state":state,"district":district})
-    return data   
+    temp=list(db.blogs.find({"state":state,"district":district},{"_id":0}))
+    data={0:len(temp)}
+    for i in range(len(temp)):
+        data[i+1]=temp[i]
+    return data
 
 @app.route('/api/view_blog_local' ,methods=['POST'])
 def view_blog_local():
@@ -107,6 +135,49 @@ def view_blog_local():
         data = get_blog_data_local(get_data)
         return data
     return {"message":"Please try again after some time.","status":400}
+
+
+
+
+######################################### Grievance post #################################################
+
+
+def put_grievance_data(grievance_data):
+    username=grievance_data["username"]
+    state=grievance_data["state"]
+    district=grievance_data["district"]
+    info=grievance_data["blog"]
+    aadhar=grievance_data["aadhar"]
+    db.grievance.insert_one({"username":username,"state":state,"district":district,"blog":info,"aadhar":aadhar})
+    return {"message":"success","status":200}
+@app.route('/api/post_grievance' ,methods=['POST'])
+def post_grievance():
+    grievance_data = request.get_json(force=True)
+    if grievance_data:
+        data = put_grievance_data(grievance_data)
+        return data
+    return {"message":"Please try again after some time.","status":400}
+
+
+########################################## view  grievance    ##########################################
+def get_grievance_data(grievance_data):
+    state=grievance_data["state"]
+    district=grievance_data["district"]
+    temp=list(db.grievance.find({"state":state,"district":district},{"_id":0}))
+    data={0:len(temp)}
+    for i in range(len(temp)):
+        data[i+1]=temp[i]
+    return data
+
+@app.route('/api/view_grievance' ,methods=['POST'])
+def view_grievance():
+    grievance_data = request.get_json(force=True)
+    if grievance_data:
+        data = get_grievance_data(grievance_data)
+        return data
+    return {"message":"Please try again after some time.","status":400}
+
+#########################################  states and districts dropdown ##############################
 
 @app.route('/api/states' ,methods=['GET'])
 def send_states():
@@ -121,13 +192,14 @@ def send_districts():
     # print(district)
     return {"district":district}
     
-
+######################################### change password ###############################
 
 
 def change_password_fun(get_data):
-    
-    data=db.login_details.find_one({ "username": username,"password":password,"category":category})
-    return data   
+    username=get_data["username"]
+    new_password=get_data["new_password"]
+    db.login_details.update_one({ "username": username},{ "$set": {"password":new_password}})
+    return {"message":"success","status":200}   
 
 @app.route('/api/change_password' ,methods=['POST'])
 def change_password():

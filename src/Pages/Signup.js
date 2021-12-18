@@ -55,8 +55,7 @@ const Signup = () => {
         setresp(data);
         console.log(data);
         if (data.status === 200) {
-          setmsg("Redirecting in 3 seconds");
-          // setTimeout(() => {}, 3000);
+          window.location.href = "http://localhost:3000/";
         }
       });
   };
@@ -67,6 +66,7 @@ const Signup = () => {
     <div>
       <Navbar />
       <Container>
+        <div className="pageheading">Sign Up</div>
         <div className="form">
           <Form>
             <Form.Group className="mb-3" controlId="formBasicName">
@@ -129,6 +129,7 @@ const Signup = () => {
                   getDistricts(e.target.value);
                 }}
               >
+                <option value="None">Select Category</option>
                 {States.map((s) => {
                   return <option value={s}>{s}</option>;
                 })}
@@ -156,9 +157,6 @@ const Signup = () => {
             >
               Sign Up
             </Button>
-            {/* <Alert key="success" variant="success">
-              {msg}
-            </Alert> */}
           </Form>
         </div>
       </Container>

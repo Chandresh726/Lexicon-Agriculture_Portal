@@ -12,7 +12,7 @@ const Login = () => {
     let body = {
       username: email,
       password: password,
-      category:Category
+      category: Category,
     };
     fetch("/api/login", {
       method: "POST",
@@ -22,9 +22,11 @@ const Login = () => {
       .then((data) => {
         setmsg(data);
         if (data.status === 200) {
-          localStorage.setItem("name", data.name);
+          localStorage.setItem("username", data.username);
+          localStorage.setItem("state", data.state);
+          localStorage.setItem("district", data.district);
           localStorage.setItem("Auth", true);
-          window.location.reload();
+          window.location.href = "http://localhost:3000";
         }
       });
   };
@@ -32,6 +34,7 @@ const Login = () => {
     <div>
       <Navbar />
       <Container>
+        <div className="pageheading">Log In</div>
         <div className="form">
           <Form>
             <Form.Group className="mb-3" controlId="formBasicName">
@@ -51,16 +54,17 @@ const Login = () => {
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicCategory">
-            <Form.Label>Category</Form.Label>
-            <Form.Select aria-label="Default select example" 
-                onChange={(e) => setCategory(e.target.value)}>
-                <option>Open this select menu</option>
+              <Form.Label>Category</Form.Label>
+              <Form.Select
+                aria-label="Default select example"
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                <option>Select Category</option>
                 <option value="Governament">Governament</option>
                 <option value="Farmer">Farmer</option>
                 <option value="Private_Sector">Private Sector</option>
-    
               </Form.Select>
-              </Form.Group>
+            </Form.Group>
             <Button
               variant="primary"
               type="submit"
@@ -71,7 +75,7 @@ const Login = () => {
               LOGIN
             </Button>
           </Form>
-          {msg != [] && msg.status === 400 ? (
+          {msg != [] && msg.status == 400 ? (
             <Alert key="alert" variant="alert">
               Invalid Credentials
             </Alert>
