@@ -14,5 +14,16 @@
   font-size: 40px;
   text-align: center;
   font-weight: bold;
-  margin-top: 30px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.state_img {
+  width: 100%;
+  margin: 5rem 0;
+}
+
+.navbarbtn {
+  margin: 0;
+  padding: 0 !important;
 }

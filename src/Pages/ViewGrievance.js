@@ -33,7 +33,9 @@ const ViewGrievance = () => {
         cards.push(
           <Card style={{ minwidth: "100%", height: "150px", margin: "10px" }}>
             <Card.Body>
-              <Card.Title>{griev[i].username}</Card.Title>
+              <Card.Title>
+                {griev[i].username}&nbsp;{griev[i].aadhar}(Aadhar)
+              </Card.Title>
               <Card.Text>{blog}</Card.Text>
               <Button
                 onClick={() => {

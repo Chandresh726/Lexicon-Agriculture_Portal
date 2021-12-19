@@ -9,12 +9,16 @@ import Blog from "./Pages/Blog";
 import Postblog from "./Pages/Postblog";
 import Viewblog from "./Pages/Viewblog";
 import Map from "./Pages/Map";
+import EachState from "./Pages/EachState";
+import FeedBack from "./Pages/FeedBack";
 import ChangePassword from "./Pages/ChangePassword";
 import ViewGrievance from "./Pages/ViewGrievance";
 import ManageDashboard from "./Pages/ManageDashboard";
 import PostGrievance from "./Pages/PostGrievance";
 import Postgraph from "./Pages/Postgraph";
 import Viewgraph from "./Pages/Viewgraph";
+import Majorcrop from "./Pages/Majorcrop";
+import ViewFeedback from "./Pages/ViewFeedback";
 
 function App() {
   // localStorage.setItem("Auth", false);
@@ -44,6 +48,12 @@ function App() {
         <Route exact path="/viewblogs">
           <Viewblog />
         </Route>
+        <Route exact path="/feedback">
+          <FeedBack />
+        </Route>
+        <Route exact path="/view_feedback">
+          <ViewFeedback />
+        </Route>
         <Route exact path="/change_password">
           <ChangePassword />
         </Route>
@@ -62,9 +72,13 @@ function App() {
         <Route exact path="/view_graph">
           <Viewgraph />
         </Route>
+        <Route exact path="/crop_details">
+          <Majorcrop />
+        </Route>
         <Route exact path="/map">
           <Map />
         </Route>
+        <Route path="/map/:state" children={<EachState />} />
       </Switch>
     </Router>
   );

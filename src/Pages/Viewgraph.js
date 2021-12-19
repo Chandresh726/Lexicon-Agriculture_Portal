@@ -69,8 +69,10 @@ const Viewgraph = () => {
             </Button>
           </Form>
         </div>
-        <img src="/crop_graph.jpg" />
-        {/* {isgraph==="1"?} */}
+        <div style={{ textAlign: "center" }}>
+          <img src="/crop_graph.jpg" />
+          <img src="/crop_graph1.jpg" />
+        </div>
       </Container>
     </div>
   );

@@ -12,6 +12,7 @@ from flask import Flask
 
 import flask
 
+
 from flask import Blueprint, render_template, jsonify, request, url_for, redirect, session
 from flask_session import Session
 import matplotlib.pyplot as plt
@@ -148,12 +149,14 @@ def view_blog_local():
     return {"message": "Please try again after some time.", "status": 400}
 
 ######################################### Grievance delete #########################################
+
+
 def grievance_delete_data(grievance_data):
     state = grievance_data["state"]
     district = grievance_data["district"]
     info = grievance_data["info"]
     aadhar = grievance_data["aadhar"]
-    db.grievance.delete_one({ "state": state,
+    db.grievance.delete_one({"state": state,
                             "district": district, "blog": info, "aadhar": aadhar})
     return {"message": "successfully deleted grievance", "status": 200}
 
@@ -210,30 +213,90 @@ def view_grievance():
         return data
     return {"message": "Please try again after some time.", "status": 400}
 
+######################################### feedback delete #########################################
+
+def feedback_delete_data(feedback_data):
+    state = feedback_data["state"]
+    district = feedback_data["district"]
+    feedback = feedback_data["feedback"]
+    db.feedback.delete_one({"state": state,
+                            "district": district, "feedback": feedback})
+    return {"message": "successfully deleted feedback", "status": 200}
+
+
+@app.route('/api/delete_feedback', methods=['POST'])
+def delete_feedback():
+    feedback_data = request.get_json(force=True)
+    if feedback_data:
+        data = feedback_delete_data(feedback_data)
+        return data
+    return {"message": "Please try again after some time.", "status": 400}
+
+########################################feedback post #################################################
+
+def put_feedback_data(feedback_data):
+    username = feedback_data["username"]
+    state = feedback_data["state"]
+    district = feedback_data["district"]
+    feedback = feedback_data["feedback"]
+    db.feedback.insert_one({"username": username, "state": state,
+                            "district": district, "feedback": feedback})
+    return {"message": "successfully added feedback", "status": 200}
+
+
+@app.route('/api/post_feedback', methods=['POST'])
+def post_feedback():
+    feedback_data = request.get_json(force=True)
+    print(feedback_data)
+    if feedback_data:
+        data = put_feedback_data(feedback_data)
+        return data
+    return {"message": "Please try again after some time.", "status": 400}
+
+########################################## view feedback   ##########################################
+
+def get_feedback_data(feedback_data):
+    username = feedback_data["username"]
+
+    temp = list(db.feedback.find(
+        {}, {"_id": 0}))
+    data = {0: len(temp)}
+    for i in range(len(temp)):
+        data[i+1] = temp[i]
+    return data
+
+
+@app.route('/api/view_feedback', methods=['POST'])
+def view_feedback():
+    feedback_data = request.get_json(force=True)
+    if feedback_data:
+        data = get_feedback_data(feedback_data)
+        return data
+    return {"message": "Please try again after some time.", "status": 400}
+
 #########################################  get crop names #############################################
-
-
 
 
 @app.route('/api/get_crop_names', methods=['GET'])
 def get_crop_names():
-    temp=list(db.crop.find({},{"_id":0}))
-    l=[]
-    data={}
+    temp = list(db.crop.find({}, {"_id": 0}))
+    l = []
+    data = {}
     for i in range(len(temp)):
         if(temp[i]['cropname'] not in l):
             data[i+1] = temp[i]
             l.append(temp[i]['cropname'])
-    data[-1]= len(l)
+    data[-1] = len(l)
     return data
 
 #########################################  post crop_rates  ############################################
 
+
 def put_crop_rates(crop_rates_data):
     cropname = crop_rates_data["cropname"]
     price = crop_rates_data["price"]
-    date=crop_rates_data["date"]
-    db.crop.insert_one({"cropname": cropname, "price": price,"date":date})
+    date = crop_rates_data["date"]
+    db.crop.insert_one({"cropname": cropname, "price": price, "date": date})
     return {"message": "successfully added price", "status": 200}
 
 
@@ -250,30 +313,45 @@ def post_crop_rates():
 #########################################  crop graphs   ##############################################
 
 def generate_crop_graph(crop_rates_data):
-        cropname = crop_rates_data["cropname"]
+    cropname = crop_rates_data["cropname"]
 
-        temp=list(db.crop.find({"cropname":cropname},{"_id":0}))
-        prices=[]
-        dates=[]
-        for i in range(len(temp)):
-            prices.append(temp[i]["price"])
-            dates.append(temp[i]["date"])
-        
+    temp = list(db.crop.find({"cropname": cropname}, {"_id": 0}))
+    data = []
+    for i in range(len(temp)):
+        dates = []
+        dates.append(temp[i]["date"])
+        dates.append(int(temp[i]["price"]))
+        data.append(dates)
+    data.sort()
+    prices=[]
+    dates=[]
+    for i in data:
+        prices.append(i[1])
+        dates.append(i[0])
 
-        plt.bar(dates,prices)
 
-        save_path = "C:/Users/bq234t/OneDrive/Documents/Projects/lexicon/public"
+    plt.bar(dates, prices)
 
+    save_path = "C:/Users/bq234t/OneDrive/Documents/Projects/lexicon/public"
 
-        completeName = os.path.join(save_path, "crop_graph.jpg")  
-        print(completeName)
-        plt.savefig(completeName)
-        try:
-            plt.clf()
-        except:
-            print('error')
-        return {"status":200}
+    completeName = os.path.join(save_path, "crop_graph.jpg")
+    plt.savefig(completeName)
+    try:
+        plt.clf()
+    except:
+        print('error')
+    plt.plot(dates, prices)
 
+    save_path = "C:/Users/bq234t/OneDrive/Documents/Projects/lexicon/public"
+
+    completeName = os.path.join(save_path, "crop_graph1.jpg")
+    plt.savefig(completeName)
+    try:
+        plt.clf()
+    except:
+        print('error')
+    
+    return {"status": 200}
 
 
 @app.route('/api/show_crop_graph', methods=['POST'])
@@ -283,7 +361,6 @@ def show_crop_graph():
         data = generate_crop_graph(crop_rates_data)
         return data
     return {"message": "Please try again after some time.", "status": 400}
-
 
 
 #########################################  states and districts dropdown ##############################
@@ -347,7 +424,15 @@ def add_dashboard():
 
 @app.route('/api/getNotice', methods=['GET'])
 def show_dashboard():
-    temp=list(db.dashboard_links.find({},{"_id":0}))
+    temp = list(db.dashboard_links.find({}, {"_id": 0}))
+    # mytext = "Welcome to the Kisan webportal."
+    # # print(mytext)
+    # myobj = gTTS(text=mytext, lang="en", slow=True)
+
+    # # save_path = "/public"
+    # # completeName = os.path.join(save_path, "text_speech.mp3")
+    # myobj.save(
+    #     "C:/Users/bq234t/OneDrive/Documents/Projects/lexicon/public/text_speech.mp3")
     data = {0: len(temp)}
     for i in range(len(temp)):
         data[i+1] = temp[i]
@@ -355,8 +440,9 @@ def show_dashboard():
 
 ############################################## get_states  logic ###########################################
 
+
 @app.route('/api/get_markers', methods=['GET'])
 def get_markers():
-    temp=list(db.state_locations.find({},{"_id":0}))[0]
+    temp = list(db.state_locations.find({}, {"_id": 0}))[0]
     print(temp)
     return temp

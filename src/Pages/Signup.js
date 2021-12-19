@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./NavBar";
-import { Container, Form, Button } from "react-bootstrap";
+import { Container, Form, Button, Card } from "react-bootstrap";
 
 const Signup = () => {
   const [States, setStates] = useState([]);
@@ -28,13 +28,6 @@ const Signup = () => {
     })
       .then((res) => res.json())
       .then((data) => setDistricts(data.district));
-  };
-  const validatePass = () => {
-    if (Password !== confirmPassword) {
-      seterror("Passwords dont match");
-    } else {
-      seterror("");
-    }
   };
   const handlesubmit = (e) => {
     e.preventDefault();
@@ -66,98 +59,102 @@ const Signup = () => {
     <div>
       <Navbar />
       <Container>
-        <div className="pageheading">Sign Up</div>
         <div className="form">
-          <Form>
-            <Form.Group className="mb-3" controlId="formBasicName">
-              <Form.Label>User Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter User Name"
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Password"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formConfirmPassword">
-              <Form.Label>Confirm Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder=" Confirm Password"
-                onChange={(e) => {
-                  setConfirmPassword(e.target.value);
-                  validatePass();
-                }}
-              />
-              <Form.Text className="text-muted">{error}</Form.Text>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicAadhaar">
-              <Form.Label>Aadhar number</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Enter Aadhar number"
-                onChange={(e) => setAadhar(e.target.value)}
-              />
-              <Form.Text className="text-muted">
-                Your Aadhar Number is secured with Us.
-              </Form.Text>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicCategory">
-              <Form.Label>Select Category</Form.Label>
-              <Form.Select
-                aria-label="Default select example"
-                onChange={(e) => setCategory(e.target.value)}
-              >
-                <option>Open this select menu</option>
-                <option value="Governament">Governament</option>
-                <option value="Farmer">Farmer</option>
-                <option value="Private_Sector">Private Sector</option>
-              </Form.Select>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicState">
-              <Form.Label>Select State</Form.Label>
-              <Form.Select
-                aria-label="Default select example"
-                onChange={(e) => {
-                  setState(e.target.value);
-                  getDistricts(e.target.value);
-                }}
-              >
-                <option value="None">Select Category</option>
-                {States.map((s) => {
-                  return <option value={s}>{s}</option>;
-                })}
-              </Form.Select>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicDistrict">
-              <Form.Label>Select District</Form.Label>
-              <Form.Select
-                aria-label="Default select example"
-                onChange={(e) => {
-                  setDistrict(e.target.value);
-                }}
-              >
-                {Districts.map((s) => {
-                  return <option value={s}>{s}</option>;
-                })}
-              </Form.Select>
-            </Form.Group>
-            <Button
-              variant="primary"
-              type="submit"
-              onClick={(e) => {
-                handlesubmit(e);
-              }}
-            >
-              Sign Up
-            </Button>
-          </Form>
+          <Card>
+            <Card.Body>
+              <div className="pageheading">Sign Up</div>
+              <Form>
+                <Form.Group className="mb-3" controlId="formBasicName">
+                  <Form.Label>User Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter User Name"
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder="Password"
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formConfirmPassword">
+                  <Form.Label>Confirm Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder=" Confirm Password"
+                    onChange={(e) => {
+                      setConfirmPassword(e.target.value);
+                    }}
+                  />
+                  {/* <Form.Text className="text-muted">{error}</Form.Text> */}
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicAadhaar">
+                  <Form.Label>Aadhar number</Form.Label>
+                  <Form.Control
+                    type="number"
+                    placeholder="Enter Aadhar number"
+                    onChange={(e) => setAadhar(e.target.value)}
+                  />
+                  <Form.Text className="text-muted">
+                    Your Aadhar Number is secured with Us.
+                  </Form.Text>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicCategory">
+                  <Form.Label>Select Category</Form.Label>
+                  <Form.Select
+                    aria-label="Default select example"
+                    onChange={(e) => setCategory(e.target.value)}
+                  >
+                    <option>Select Category</option>
+                    <option value="Governament">Governament</option>
+                    <option value="Farmer">Farmer</option>
+                    <option value="Private_Sector">Private Sector</option>
+                  </Form.Select>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicState">
+                  <Form.Label>Select State</Form.Label>
+                  <Form.Select
+                    aria-label="Default select example"
+                    onChange={(e) => {
+                      setState(e.target.value);
+                      getDistricts(e.target.value);
+                    }}
+                  >
+                    <option value="None">Select State</option>
+                    {States.map((s) => {
+                      return <option value={s}>{s}</option>;
+                    })}
+                  </Form.Select>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicDistrict">
+                  <Form.Label>Select District</Form.Label>
+                  <Form.Select
+                    aria-label="Default select example"
+                    onChange={(e) => {
+                      setDistrict(e.target.value);
+                    }}
+                  >
+                    <option value={null}>Select District</option>
+                    {Districts.map((s) => {
+                      return <option value={s}>{s}</option>;
+                    })}
+                  </Form.Select>
+                </Form.Group>
+                <Button
+                  variant="primary"
+                  type="submit"
+                  onClick={(e) => {
+                    handlesubmit(e);
+                  }}
+                >
+                  Sign Up
+                </Button>
+              </Form>
+            </Card.Body>
+          </Card>
         </div>
       </Container>
     </div>
